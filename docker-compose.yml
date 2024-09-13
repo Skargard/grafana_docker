@@ -1,0 +1,33 @@
+services:
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    restart: unless-stopped
+    user: '0'
+    ports:
+      - '3000:3000'
+    volumes:
+      - '$PWD/data:/var/lib/grafana'
+      - '$PWD/provisioning:/etc/grafana/provisioning'
+    environment:
+      - GF_DATABASE_TYPE=mysql
+      - GF_DATABASE_HOST=mariadb:3306
+      - GF_DATABASE_NAME=grafana
+      - GF_DATABASE_USER=grafana
+      - GF_DATABASE_PASSWORD=Bonjov123
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=Bonjov123
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:latest
+    container_name: grafana-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=Bonjov123
+      - MYSQL_DATABASE=grafana
+      - MYSQL_USER=grafana
+      - MYSQL_PASSWORD=Bonjov123
+    volumes:
+      - '$PWD/mysql_data:/var/lib/mysql'
